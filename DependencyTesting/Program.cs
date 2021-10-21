@@ -27,16 +27,14 @@ namespace DependencyTesting
                 // Arrange
                 var mockDatabase = new Mock<IDatabase>();
                 mockDatabase.Setup(m => m.GetEntityById(It.IsAny<int>())).Returns(1);
-                BusinessService service = new BusinessService();
-                // var database = new Database();
-                // public void SaveEntity(int entityId, int entity)
-                // database.SaveEntity(1,1);
+                BusinessService service = new BusinessService(mockDatabase.Object);
 
                 // Act
-                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(mockDatabase.Object);
+                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(1);
 
                 // Assert
                 Assert.AreEqual(1, domainValue);
+                
             }
             
             [Test]
@@ -47,13 +45,10 @@ namespace DependencyTesting
                 // Arrange
                 var mockDatabase = new Mock<IDatabase>();
                 mockDatabase.Setup(m => m.GetEntityById(It.IsAny<int>())).Returns(3);
-                BusinessService service = new BusinessService();
-                // var database = new Database();
-                // public void SaveEntity(int entityId, int entity)
-                // database.SaveEntity(1,3);
+                BusinessService service = new BusinessService(mockDatabase.Object);
 
                 // Act
-                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(mockDatabase.Object);
+                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(1);
 
                 // Assert
                 Assert.AreEqual(6, domainValue);
@@ -67,13 +62,10 @@ namespace DependencyTesting
                 // Arrange
                 var mockDatabase = new Mock<IDatabase>();
                 mockDatabase.Setup(m => m.GetEntityById(It.IsAny<int>())).Returns(5);
-                BusinessService service = new BusinessService();
-                // var database = new Database();
-                // public void SaveEntity(int entityId, int entity)
-                // database.SaveEntity(1,5);
+                BusinessService service = new BusinessService(mockDatabase.Object);
 
                 // Act
-                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(mockDatabase.Object);
+                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(1);
 
                 // Assert
                 Assert.AreEqual(15, domainValue);
@@ -87,13 +79,10 @@ namespace DependencyTesting
                 // Arrange
                 var mockDatabase = new Mock<IDatabase>();
                 mockDatabase.Setup(m => m.GetEntityById(It.IsAny<int>())).Returns((int? m) => null);
-                BusinessService service = new BusinessService();
-                // var database = new Database();
-                //  public void SaveEntity(int entityId, int entity)
-                // database.SaveEntity(1,null);
+                BusinessService service = new BusinessService(mockDatabase.Object);
 
                 // Act
-                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(mockDatabase.Object);
+                int? domainValue = service.RetrieveEntityWithBusinessLogicApplied(1);
 
                 // Assert
                 Assert.AreEqual(-1, domainValue);
@@ -109,19 +98,17 @@ namespace DependencyTesting
         //-----------------* BUSINESS LOGIC
         public class BusinessService
         {
-            /*
+            
             private IDatabase myDatabase;
             
             public BusinessService(IDatabase database)
             {
-                database = new Database();
                 myDatabase = database;
             }
-            */
-
-            public int? RetrieveEntityWithBusinessLogicApplied(IDatabase database)
+            
+            public int? RetrieveEntityWithBusinessLogicApplied(int entityId)
             {
-                int? entity = database.GetEntityById(1);
+                int? entity = myDatabase.GetEntityById(entityId);
 
                 if (entity % 3 == 0)
                 {
@@ -139,39 +126,6 @@ namespace DependencyTesting
                 }
             }
         }
-
-        /*
-        public class Database : IDatabase
-        {
-            // Static "database" whose values remain in memory
-            private static Dictionary<int,int?> database;
-            
-            public Database()
-            {
-                if (database == null)
-                {
-                    // Create in memory database
-                    database = new Dictionary<int,int?>();
-                }
-            }
-            
-            public void SaveEntity(int entityId, int? entity)
-            {
-                database[entityId] = entity;
-            }
-            
-            public int? GetEntityById(int entityId)
-            {
-                if (database.ContainsKey(entityId))
-                {
-                    return database[entityId];
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-        */
+        
     }
 }

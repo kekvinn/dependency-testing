@@ -34,9 +34,8 @@ namespace DependencyTesting
 
                 // Assert
                 Assert.AreEqual(1, domainValue);
-                
             }
-            
+
             [Test]
             public void SampleTest2()
             {
@@ -98,14 +97,13 @@ namespace DependencyTesting
         //-----------------* BUSINESS LOGIC
         public class BusinessService
         {
-            
             private IDatabase myDatabase;
-            
+
             public BusinessService(IDatabase database)
             {
                 myDatabase = database;
             }
-            
+
             public int? RetrieveEntityWithBusinessLogicApplied(int entityId)
             {
                 int? entity = myDatabase.GetEntityById(entityId);
@@ -126,6 +124,5 @@ namespace DependencyTesting
                 }
             }
         }
-        
     }
 }
